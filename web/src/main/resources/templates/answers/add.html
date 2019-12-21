@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ADD ANSWER</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:include="fragments/navigation">MENU</div>
+<div class="container">
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h1>Add new answer</h1>
+            <form th:action="@{/answers/add}" method="post" th:object="${answer}">
+                <div class="form-group">
+                    <label for="description">Content</label>
+                    <textarea id="description" class="form-control" th:field="*{content}"/>
+                </div>
+                <div th:if="${errors.containsKey('content')}">
+                    <p class="text-danger" th:text="${errors.get('content')}"></p>
+                </div>
+                <input type="text" class="form-control" hidden="hidden" readonly="readonly" th:field="*{subjectDTO.id}"/>
+                <div class="form-group">
+                    <button class="btn" style="background-color: #304FFE;" type="submit">Add</button>
+                    <button class="btn" style="background-color: #FFF176;" type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

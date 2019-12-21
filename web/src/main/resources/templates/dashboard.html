@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MAIN PAGE</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/font-awesome/5.7.2/css/all.css" />
+
+    <style>
+        .maprouter {
+            position:relative;
+            text-align:right;
+            height:500px;
+            width:600px;
+        }
+        .gmap_canvas {
+            overflow:hidden;
+            background:none!important;
+            height:500px;
+            width:600px;
+        }
+        .gmap_canvas2 {
+            overflow:hidden;
+            background:none!important;
+            height:500px;
+            width:600px;
+        }
+
+    </style>
+</head>
+<body>
+<div th:include="fragments/navigation">MENU</div>
+<div class="container">
+
+    <div class="row" >
+        <div class="col-8 offset-2">
+
+            <div class="maprouter mb-5">
+                <div class="gmap_canvas">
+                    <iframe
+                            width="600"
+                            height="500"
+                            id="gmap_canvas"
+                            th:src="@{'https://maps.google.com/maps?q=' + ${geo.latitude} + '%2C' + ${geo.longitude} + '&t=&z=13&ie=UTF8&iwloc=&output=embed'}"
+                            frameborder="0"
+                            scrolling="no"
+                            marginheight="0"
+                            marginwidth="0">
+                    </iframe>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

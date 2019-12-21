@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MAIN PAGE</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/font-awesome/5.7.2/css/all.css" />
+
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+<div th:include="fragments/navigation">MENU</div>
+<div class="container">
+
+    <div class="row" >
+        <div class="col-10 offset-1">
+
+            <table class="table table-info">
+                <thead>
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Replies</th>
+                        <th scope="col">Last Answer</th>
+                        <th sec:authorize="hasRole('ROLE_ADMIN')" scope="col">Settings</th>
+                    </tr>
+                </thead>
+
+                <tbody >
+                    <tr th:if="${searchSubjects.isEmpty()}" >
+                        <td class="text-center" th:colspan="4">
+                            <span th:text="${'Result is empty'}"></span>
+                        </td>
+                    </tr>
+                    <tr th:if="${not searchSubjects.isEmpty()}" th:each="s, iStat : ${searchSubjects}">
+                        <td scope="row">
+                            <img class="mr-3 mt-2 ml-2 rounded-circle" style="min-width: 50px; max-width: 20px;" th:src="@{/img/{name}(name=${s.userDTO.photo})}" th:alt="${s.userDTO.name}">
+                            <span class="btn-block text-left" th:text="${{s.dateTimeStart}}"></span>
+                        </td>
+                        <td>
+                            <div class="float-left">
+                                <a type="button" class="btn btn-link btn-block text-left" style="font-size: 20px;" th:text="${s.title}" th:href="@{/subjects/{id}(id=${s.id})}"></a>
+
+                                <button type="button" class="btn btn-link btn-sm btn-block text-left" data-toggle="modal" th:text="${s.userDTO.name} + ' ' + ${s.userDTO.surname}" th:href="'#modalScrollable' + ${iStat.index}">
+
+                                </button>
+
+                                <div class="modal fade" th:id="'modalScrollable' + ${iStat.index}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalScrollableTitle">User details</h5>
+                                                <a type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </a>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="media-body">
+
+                                                    <table class="table">
+                                                        <tbody>
+                                                            <tr >
+                                                                <td >Name</td>
+                                                                <td th:text="${s.userDTO.name}"></td>
+                                                            </tr>
+                                                            <tr >
+                                                                <td >Surname</td>
+                                                                <td th:text="${s.userDTO.surname}"></td>
+                                                            </tr>
+                                                            <tr >
+                                                                <td >Birthday</td>
+                                                                <td th:text="${s.userDTO.birthday}"></td>
+                                                            </tr>
+                                                            <tr >
+                                                                <td >Username</td>
+                                                                <td th:text="${s.userDTO.userName}"></td>
+                                                            </tr>
+                                                            <tr >
+                                                                <td >Email</td>
+                                                                <td th:text="${s.userDTO.email}"></td>
+                                                            </tr>
+                                                            <tr >
+                                                                <td >Registration date</td>
+                                                                <td th:text="${s.userDTO.registrationDate}"></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span th:if="${answers.get(s.id) != null}" th:text="${answers.get(s.id).size()}"></span>
+                            <span th:unless="${answers.get(s.id) != null}" th:text="'0'"></span>
+                        </td>
+                        <td>
+                            <div th:with="expr_result = ${lastAnswer.get(s.id) != null and lastAnswer.get(s.id).isPresent()}">
+                                <span th:if="${expr_result}" th:with="userAnswer = ${lastAnswer.get(s.id).get()}">
+
+                                     <a type="button" class="btn btn-link btn-sm mr-2" data-toggle="modal" th:text="${userAnswer.userDTO.name} + ' ' + ${userAnswer.userDTO.surname}" th:href="'#modalScrollableLastAnswer' + ${iStat.index}">
+
+                                    </a>
+
+                                    <div class="modal fade" th:id="'modalScrollableLastAnswer' + ${iStat.index}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitleLastAnswer" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalScrollableTitleLastAnswer">User details</h5>
+                                                    <a type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </a>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="media-body">
+
+                                                        <table class="table">
+                                                            <tbody>
+                                                                <tr >
+                                                                    <td >Name</td>
+                                                                    <td th:text="${userAnswer.userDTO.name}"></td>
+                                                                </tr>
+                                                                <tr >
+                                                                    <td >Surname</td>
+                                                                    <td th:text="${userAnswer.userDTO.surname}"></td>
+                                                                </tr>
+                                                                <tr >
+                                                                    <td >Birthday</td>
+                                                                    <td th:text="${userAnswer.userDTO.birthday}"></td>
+                                                                </tr>
+                                                                <tr >
+                                                                    <td >Username</td>
+                                                                    <td th:text="${userAnswer.userDTO.userName}"></td>
+                                                                </tr>
+                                                                <tr >
+                                                                    <td >Email</td>
+                                                                    <td th:text="${userAnswer.userDTO.email}"></td>
+                                                                </tr>
+                                                                <tr >
+                                                                    <td >Registration date</td>
+                                                                    <td th:text="${userAnswer.userDTO.registrationDate}"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                                <span th:unless="${expr_result}">
+                                    <span th:text="'Don\'t have replies'"></span>
+                                </span>
+                            </div>
+                        </td>
+                        <td sec:authorize="hasRole('ROLE_ADMIN')">
+
+
+                            <a class="btn btn-link btn-lg d-inline far fa-edit" th:href="@{/subjects/modify/{id}(id=${s.id})}" data-toggle="tooltip" data-placement="top" title="Modify"></a>
+
+                            <form class="d-inline" th:action="@{/subjects/delete}" method="post">
+                                <input type="text" name="id" th:value="${s.id}" hidden="hidden" readonly="readonly" />
+                                <button class="btn btn-link btn-lg far fa-trash-alt" type="submit" data-toggle="tooltip" data-placement="top" title="Delete"> </button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

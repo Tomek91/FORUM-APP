@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MAIN PAGE</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+    <div th:include="fragments/navigation">MENU</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-8 offset-2" >
+                <div class="card text-white bg-danger mb-3" style="max-width: 50rem;">
+                    <div class="card-header"><p>CODE = <span th:text="${code}"></span></p></div>
+                    <div class="card-body">
+                        <h5 class="card-title"><p>DATE TIME = <span th:text="${dateTime}"></span></p></h5>
+                        <p class="card-text"><p>MESSAGE = <span th:text="${message}"></span></p></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

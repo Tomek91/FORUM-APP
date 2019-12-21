@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MODIFY ANSWER</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="/webjars/jquery/3.3.1-2/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:include="fragments/navigation">MENU</div>
+<div class="container">
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h1>Modify answer</h1>
+            <form th:action="@{/answers/modify}" method="post" th:object="${answer}">
+                <div class="form-group">
+                    <label for="description">Content</label>
+                    <textarea id="description" class="form-control" th:field="*{content}"/>
+                </div>
+                <div th:if="${errors.containsKey('content')}">
+                    <p class="text-danger" th:text="${errors.get('content')}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="users">User</label>
+                    <select id="users" th:field="*{userDTO.id}">
+                        <option th:each="u : ${users}" th:value="${u.id}" th:text="${u.name} + ' ' + ${u.surname}"></option>
+                    </select>
+                </div>
+                <div th:if="${errors.containsKey('userDTO')}">
+                    <p class="text-danger" th:text="${errors.get('userDTO')}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="positiveGrades">Positive grades</label>
+                    <input id="positiveGrades" type="number" class="form-control" th:field="*{positiveGrades}"/>
+                </div>
+                <div th:if="${errors.containsKey('positiveGrades')}">
+                    <p class="text-danger" th:text="${errors.get('positiveGrades')}"></p>
+                </div>
+                <div class="form-group">
+                    <label for="negativeGrades">Negative grades</label>
+                    <input id="negativeGrades" type="number" class="form-control" th:field="*{negativeGrades}"/>
+                </div>
+                <div th:if="${errors.containsKey('negativeGrades')}">
+                    <p class="text-danger" th:text="${errors.get('negativeGrades')}"></p>
+                </div>
+
+                <input type="text" class="form-control" hidden="hidden" readonly="readonly" th:field="*{subjectDTO.id}"/>
+                <input type="text" class="form-control" hidden="hidden" readonly="readonly" th:field="*{id}"/>
+                <div class="form-group">
+                    <button class="btn" style="background-color: #304FFE;" type="submit">Add</button>
+                    <button class="btn" style="background-color: #FFF176;" type="reset">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
